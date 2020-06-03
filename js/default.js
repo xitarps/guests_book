@@ -1,6 +1,8 @@
+let guests = [create_guest(1,'Xita'),create_guest(2,'Jão'),create_guest(3,'Bru')];
+
 window.onload = ()=>{
-  let guests = [create_guest(1,'Xita'),create_guest(2,'Jão'),create_guest(3,'Bru')];
-  createList(guests);
+  
+  generateList(guests);
   let btn_save = document.querySelector('#btn_cadastrar');
   btn_save_listener(btn_save);
 }
@@ -12,9 +14,9 @@ function create_guest(id,name){
   };
 }
 
-function createList(arr){
+function generateList(arr){
   let ul = document.querySelector('#guests_ul_list')
-
+  ul.innerHTML = ''
   arr.forEach((temp_guest)=>{
     append_li_to(ul,temp_guest);
   });
@@ -31,6 +33,8 @@ function addGuest(){
   };
 
   append_li_to(ul,temp_guest);
+  guests.push(temp_guest)
+  console.log(guests)
 }
 
 function append_li_to(ul,temp_guest){
@@ -39,6 +43,10 @@ function append_li_to(ul,temp_guest){
   li.innerHTML = temp_guest.name + ' ';
   let a = document.createElement('a');
   a.href = `#${temp_guest.id}`;
+  a.addEventListener('click', (e)=>{
+    e.preventDefault()
+    deletarGuest(li.id)
+  })
   a.innerHTML = 'Remover';
   li.appendChild(a);
   ul.appendChild(li);
@@ -49,4 +57,14 @@ function btn_save_listener(btn){
     e.preventDefault();
     addGuest();
   });
+}
+
+function deletarGuest(id){
+  let tmp_id = id.split('_')[0]
+  
+  guests = guests.filter(function(item){
+    console.log(item);
+    if(item.id != tmp_id)return item
+  })
+  generateList(guests);
 }
