@@ -1,4 +1,4 @@
-let guests = [create_guest(1,'Xita'),create_guest(2,'Jão'),create_guest(3,'Bru')];
+let guests = loadGuestList() ;
 
 window.onload = ()=>{
   
@@ -28,12 +28,13 @@ function addGuest(){
 
   let ul = document.querySelector('#guests_ul_list');
   let temp_guest = {
-    id: (Number(ul.lastChild.id.split('_')[0])+1),
+    id: (ul.lastChild!=null)?(Number(ul.lastChild.id.split('_')[0])+1) : 0,
     name: input_field
   };
 
   append_li_to(ul,temp_guest);
   guests.push(temp_guest)
+  saveGuestsList(guests)
   console.log(guests)
 }
 
@@ -66,5 +67,13 @@ function deletarGuest(id){
     console.log(item);
     if(item.id != tmp_id)return item
   })
+  saveGuestsList(guests)
   generateList(guests);
+}
+
+function saveGuestsList(list){
+  localStorage.setItem('guests_list', JSON.stringify(list))
+}
+function loadGuestList(){
+  return JSON.parse(localStorage.getItem('guests_list')) || [];
 }
